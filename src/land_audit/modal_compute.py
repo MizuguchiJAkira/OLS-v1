@@ -81,42 +81,57 @@ def compute_viewshed_batch(
     
     def compute_wedge(cam_x, cam_y, cam_z, azimuth):
         """Compute viewshed wedge with terrain occlusion."""
+        # Convert max_range from meters to degrees (approximate)
+        # 1 degree latitude ≈ 111,000 meters
+        # 1 degree longitude ≈ 111,000 * cos(latitude) meters
+        meters_per_degree_lat = 111000.0
+        meters_per_degree_lon = 111000.0 * np.cos(np.radians(cam_y))
+
+        # Convert step size to degrees
+        step_size_lat = step_size / meters_per_degree_lat
+        step_size_lon = step_size / meters_per_degree_lon
+
         # Generate rays within FOV
         half_fov = fov / 2.0
         angles = np.linspace(azimuth - half_fov, azimuth + half_fov, 20)
-        
+
         wedge_points = [(cam_x, cam_y)]
-        
+
         for angle in angles:
-            rad = np.radians(angle)
-            dx = max_range * np.cos(rad)
-            dy = max_range * np.sin(rad)
-            
+            rad = np.radians(90 - angle)  # Convert to math convention (0=East)
+            # Direction in degrees, accounting for lat/lon scaling
+            dx_deg = np.cos(rad) * step_size_lon / step_size
+            dy_deg = np.sin(rad) * step_size_lat / step_size
+
             # Sample along ray
             num_steps = int(max_range / step_size)
+            ray_end = None
+
             for i in range(1, num_steps + 1):
-                frac = i / num_steps
-                ray_x = cam_x + dx * frac
-                ray_y = cam_y + dy * frac
-                
+                ray_x = cam_x + dx_deg * i * step_size
+                ray_y = cam_y + dy_deg * i * step_size
+
                 # Check bounds
                 if not (bounds[0] <= ray_x <= bounds[2] and bounds[1] <= ray_y <= bounds[3]):
                     break
-                
+
                 # Get terrain elevation
                 row, col = world_to_pixel(ray_x, ray_y, transform)
                 if 0 <= row < elevation.shape[0] and 0 <= col < elevation.shape[1]:
                     terrain_z = elevation[row, col]
-                    
+
                     # Line-of-sight check with vegetation tolerance
-                    expected_z = cam_z + camera_height - (frac * 0.5)  # Simple slope model
+                    distance_m = i * step_size
+                    expected_z = cam_z + camera_height - (distance_m / max_range * 0.5)
                     if terrain_z > expected_z + vegetation_tolerance:
                         # Occluded
                         break
-                
-                if i == num_steps:
-                    wedge_points.append((ray_x, ray_y))
-        
+
+                    ray_end = (ray_x, ray_y)
+
+            if ray_end:
+                wedge_points.append(ray_end)
+
         if len(wedge_points) > 2:
             return Polygon(wedge_points)
         return None
