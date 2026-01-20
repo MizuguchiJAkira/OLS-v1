@@ -1,0 +1,539 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "EPSG:4326"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "aoi_boundary",
+        "name": "Area of Interest"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -76.78198198198199,
+              42.48198198198198
+            ],
+            [
+              -76.78198198198199,
+              42.51801801801802
+            ],
+            [
+              -76.81801801801801,
+              42.51801801801802
+            ],
+            [
+              -76.81801801801801,
+              42.48198198198198
+            ],
+            [
+              -76.78198198198199,
+              42.48198198198198
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommendation_zones",
+        "zone_id": 1,
+        "type": "corridor",
+        "avg_score": 0.9141210913658142,
+        "area_km2": 0.49169855016488834,
+        "centroid_lon": -76.81114520396582,
+        "centroid_lat": 42.496486794400944,
+        "recommended_cameras": 1,
+        "priority": "high",
+        "description": "High-density corridor zone (0.49 km\u00b2). Heavy concentration of wildlife travel routes. Ideal for trail camera placement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -76.81172569864026,
+              42.493833104460606
+            ],
+            [
+              -76.81628672822522,
+              42.49524287724141
+            ],
+            [
+              -76.81645258384648,
+              42.496320938779675
+            ],
+            [
+              -76.81106227615518,
+              42.49930633996255
+            ],
+            [
+              -76.80956957556374,
+              42.49972097901573
+            ],
+            [
+              -76.80583782408515,
+              42.49590629972649
+            ],
+            [
+              -76.80550611284261,
+              42.495491660673316
+            ],
+            [
+              -76.8103988536701,
+              42.49416481570315
+            ],
+            [
+              -76.81172569864026,
+              42.493833104460606
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommendation_zones",
+        "zone_id": 2,
+        "type": "corridor",
+        "avg_score": 0.9104330539703369,
+        "area_km2": 0.5250828735777723,
+        "centroid_lon": -76.78900347852614,
+        "centroid_lat": 42.486950096177864,
+        "recommended_cameras": 1,
+        "priority": "high",
+        "description": "High-density corridor zone (0.53 km\u00b2). Heavy concentration of wildlife travel routes. Ideal for trail camera placement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -76.78701321107089,
+              42.48272077783545
+            ],
+            [
+              -76.78883762290488,
+              42.483135416888636
+            ],
+            [
+              -76.79198887970902,
+              42.48661838493532
+            ],
+            [
+              -76.79232059095156,
+              42.49416481570315
+            ],
+            [
+              -76.79091081817076,
+              42.493003826354254
+            ],
+            [
+              -76.78311560397103,
+              42.484213478426895
+            ],
+            [
+              -76.7851887992369,
+              42.483052489078
+            ],
+            [
+              -76.78701321107089,
+              42.48272077783545
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommendation_zones",
+        "zone_id": 4,
+        "type": "corridor",
+        "avg_score": 0.7894040942192078,
+        "area_km2": 1.0067830730758578,
+        "centroid_lon": -76.78950104538995,
+        "centroid_lat": 42.48670131274596,
+        "recommended_cameras": 1,
+        "priority": "high",
+        "description": "High-density corridor zone (1.01 km\u00b2). Heavy concentration of wildlife travel routes. Ideal for trail camera placement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -76.78576929391136,
+              42.48214028316101
+            ],
+            [
+              -76.78950104538995,
+              42.482554922214185
+            ],
+            [
+              -76.79447671402808,
+              42.48363298375244
+            ],
+            [
+              -76.79232059095156,
+              42.494828238188234
+            ],
+            [
+              -76.79057910692822,
+              42.49333553759679
+            ],
+            [
+              -76.78253510929657,
+              42.483052489078
+            ],
+            [
+              -76.78576929391136,
+              42.48214028316101
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommendation_zones",
+        "zone_id": 3,
+        "type": "corridor",
+        "avg_score": 0.762749969959259,
+        "area_km2": 1.3570642735552045,
+        "centroid_lon": -76.80998421461692,
+        "centroid_lat": 42.494662382566965,
+        "recommended_cameras": 1,
+        "priority": "medium",
+        "description": "High-density corridor zone (1.36 km\u00b2). Heavy concentration of wildlife travel routes. Ideal for trail camera placement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -76.8167013672784,
+              42.48247199440355
+            ],
+            [
+              -76.81686722289966,
+              42.48479397310134
+            ],
+            [
+              -76.81661843946776,
+              42.49665265002221
+            ],
+            [
+              -76.81056470929137,
+              42.499886834636996
+            ],
+            [
+              -76.80633539094896,
+              42.50146246303907
+            ],
+            [
+              -76.7963840536727,
+              42.495408732862685
+            ],
+            [
+              -76.79696454834715,
+              42.4949940938095
+            ],
+            [
+              -76.8167013672784,
+              42.48247199440355
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommendation_zones",
+        "zone_id": 2,
+        "type": "corridor",
+        "avg_score": 0.7375792860984802,
+        "area_km2": 0.1628544913694495,
+        "centroid_lon": -76.81612087260395,
+        "centroid_lat": 42.504364936411314,
+        "recommended_cameras": 0,
+        "priority": "medium",
+        "description": "High-density corridor zone (0.16 km\u00b2). Heavy concentration of wildlife travel routes. Ideal for trail camera placement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -76.8169501507103,
+              42.50179417428161
+            ],
+            [
+              -76.81744771757411,
+              42.50212588552416
+            ],
+            [
+              -76.81777942881665,
+              42.50303809144115
+            ],
+            [
+              -76.81744771757411,
+              42.50477957546449
+            ],
+            [
+              -76.81703307852094,
+              42.50544299794957
+            ],
+            [
+              -76.81587208917205,
+              42.50660398729847
+            ],
+            [
+              -76.8152915944976,
+              42.507018626351645
+            ],
+            [
+              -76.81471109982314,
+              42.50652105948784
+            ],
+            [
+              -76.8143793885806,
+              42.50618934824529
+            ],
+            [
+              -76.81446231639124,
+              42.50560885357085
+            ],
+            [
+              -76.81537452230823,
+              42.502540524577334
+            ],
+            [
+              -76.81603794479331,
+              42.50204295771352
+            ],
+            [
+              -76.8169501507103,
+              42.50179417428161
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommendation_zones",
+        "zone_id": 1,
+        "type": "corridor",
+        "avg_score": 0.6984428763389587,
+        "area_km2": 0.47992083200653585,
+        "centroid_lon": -76.80973543118502,
+        "centroid_lat": 42.510418666587704,
+        "recommended_cameras": 0,
+        "priority": "medium",
+        "description": "High-density corridor zone (0.48 km\u00b2). Heavy concentration of wildlife travel routes. Ideal for trail camera placement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -76.81147691520836,
+              42.50237466895606
+            ],
+            [
+              -76.81222326550407,
+              42.50370151392623
+            ],
+            [
+              -76.81230619331471,
+              42.50544299794957
+            ],
+            [
+              -76.81131105958708,
+              42.514896768362014
+            ],
+            [
+              -76.81106227615518,
+              42.515477263036466
+            ],
+            [
+              -76.81064763710201,
+              42.51605775771091
+            ],
+            [
+              -76.80998421461692,
+              42.51663825238536
+            ],
+            [
+              -76.80840858621485,
+              42.517467530491714
+            ],
+            [
+              -76.80757930810849,
+              42.51630654114282
+            ],
+            [
+              -76.80650124657024,
+              42.51224307842168
+            ],
+            [
+              -76.80708174124467,
+              42.51058452220897
+            ],
+            [
+              -76.81081349272327,
+              42.50295516363051
+            ],
+            [
+              -76.81147691520836,
+              42.50237466895606
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommendation_zones",
+        "zone_id": 3,
+        "type": "corridor",
+        "avg_score": 0.2861786484718323,
+        "area_km2": 15.959740154206049,
+        "centroid_lon": -76.80003287734067,
+        "centroid_lat": 42.50005269025827,
+        "recommended_cameras": 2,
+        "priority": "medium",
+        "description": "Moderate corridor zone (15.96 km\u00b2). Secondary movement area with good detection potential."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -76.78245218148594,
+              42.48205735535037
+            ],
+            [
+              -76.80691588562341,
+              42.48272077783545
+            ],
+            [
+              -76.81537452230823,
+              42.495657516294585
+            ],
+            [
+              -76.81678429508904,
+              42.49781363937111
+            ],
+            [
+              -76.81794528443793,
+              42.51796509735553
+            ],
+            [
+              -76.79348158030047,
+              42.517301674870446
+            ],
+            [
+              -76.79066203473886,
+              42.512989428717404
+            ],
+            [
+              -76.78220339805404,
+              42.50005269025827
+            ],
+            [
+              -76.78245218148594,
+              42.48205735535037
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommendation_zones",
+        "zone_id": 5,
+        "type": "corridor",
+        "avg_score": 0.2861786484718323,
+        "area_km2": 15.959740154206049,
+        "centroid_lon": -76.80003287734067,
+        "centroid_lat": 42.50005269025827,
+        "recommended_cameras": 0,
+        "priority": "medium",
+        "description": "Moderate corridor zone (15.96 km\u00b2). Secondary movement area with good detection potential."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -76.78245218148594,
+              42.48205735535037
+            ],
+            [
+              -76.80691588562341,
+              42.48272077783545
+            ],
+            [
+              -76.81537452230823,
+              42.495657516294585
+            ],
+            [
+              -76.81678429508904,
+              42.49781363937111
+            ],
+            [
+              -76.81794528443793,
+              42.51796509735553
+            ],
+            [
+              -76.79348158030047,
+              42.517301674870446
+            ],
+            [
+              -76.79066203473886,
+              42.512989428717404
+            ],
+            [
+              -76.78220339805404,
+              42.50005269025827
+            ],
+            [
+              -76.78245218148594,
+              42.48205735535037
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "metadata": {
+    "pinch_score_stats": {
+      "layer": "pinch_score_summary",
+      "mean": 0.23019146919250488,
+      "max": 1.0,
+      "std": 0.16597989201545715
+    },
+    "bedding_score_stats": {
+      "layer": "bedding_score_summary",
+      "mean": 0.5836199396187836,
+      "max": 0.9512444206326318,
+      "std": 0.09731914988734512
+    }
+  }
+}

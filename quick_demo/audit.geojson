@@ -1,0 +1,143 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "EPSG:4326"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "aoi_boundary",
+        "name": "Area of Interest"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -76.4727927927928,
+              42.442792792792794
+            ],
+            [
+              -76.4727927927928,
+              42.45720720720721
+            ],
+            [
+              -76.4872072072072,
+              42.45720720720721
+            ],
+            [
+              -76.4872072072072,
+              42.442792792792794
+            ],
+            [
+              -76.4727927927928,
+              42.442792792792794
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 1,
+        "type": "pinch",
+        "score": NaN,
+        "slope_deg": NaN,
+        "aspect_deg": NaN,
+        "reason": "Moderate travel corridor (score=nan). Natural terrain feature concentrates wildlife movement.",
+        "lon": 8883160.30259707,
+        "lat": 25678391.440080285
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8883160.30259707,
+          25678391.440080285
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 2,
+        "type": "pinch",
+        "score": NaN,
+        "slope_deg": NaN,
+        "aspect_deg": NaN,
+        "reason": "Moderate travel corridor (score=nan). Natural terrain feature concentrates wildlife movement.",
+        "lon": 8883302.864381041,
+        "lat": 25678391.440080285
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8883302.864381041,
+          25678391.440080285
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 3,
+        "type": "bedding",
+        "score": NaN,
+        "slope_deg": NaN,
+        "aspect_deg": NaN,
+        "reason": "Suitable bedding area (score=nan). N-facing terrain with moderate concealment opportunities.",
+        "lon": 8883160.30259707,
+        "lat": 25678391.440080285
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8883160.30259707,
+          25678391.440080285
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 4,
+        "type": "bedding",
+        "score": NaN,
+        "slope_deg": NaN,
+        "aspect_deg": NaN,
+        "reason": "Suitable bedding area (score=nan). N-facing terrain with moderate concealment opportunities.",
+        "lon": 8883302.864381041,
+        "lat": 25678391.440080285
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8883302.864381041,
+          25678391.440080285
+        ]
+      }
+    }
+  ],
+  "metadata": {
+    "pinch_score_stats": {
+      "layer": "pinch_score_summary",
+      "mean": NaN,
+      "max": NaN,
+      "std": NaN
+    },
+    "bedding_score_stats": {
+      "layer": "bedding_score_summary",
+      "mean": NaN,
+      "max": NaN,
+      "std": NaN
+    }
+  }
+}

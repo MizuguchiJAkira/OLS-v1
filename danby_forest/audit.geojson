@@ -1,0 +1,185 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "EPSG:4326"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "aoi_boundary",
+        "name": "Area of Interest"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -76.45818648648648,
+              42.31388648648648
+            ],
+            [
+              -76.45818648648648,
+              42.34091351351351
+            ],
+            [
+              -76.48521351351351,
+              42.34091351351351
+            ],
+            [
+              -76.48521351351351,
+              42.31388648648648
+            ],
+            [
+              -76.45818648648648,
+              42.31388648648648
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 1,
+        "type": "pinch",
+        "score": 1.0,
+        "slope_deg": 89.99642944335938,
+        "aspect_deg": 23.011825561523438,
+        "reason": "High-traffic corridor funnel point (score=1.00). Steep adjacent terrain forces movement through this zone.",
+        "lon": -76.45859558042609,
+        "lat": 42.330424333918366
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.45859558042609,
+          42.330424333918366
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 2,
+        "type": "pinch",
+        "score": 0.9465690851211548,
+        "slope_deg": 89.99679565429688,
+        "aspect_deg": 107.29261779785156,
+        "reason": "High-traffic corridor funnel point (score=0.95). Steep adjacent terrain forces movement through this zone.",
+        "lon": -76.47560746611285,
+        "lat": 42.314238267925155
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.47560746611285,
+          42.314238267925155
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 3,
+        "type": "pinch",
+        "score": 0.9418110251426697,
+        "slope_deg": 89.99797821044922,
+        "aspect_deg": 118.97836303710938,
+        "reason": "High-traffic corridor funnel point (score=0.94). Steep adjacent terrain forces movement through this zone.",
+        "lon": -76.45851299845674,
+        "lat": 42.32712105514424
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.45851299845674,
+          42.32712105514424
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 4,
+        "type": "bedding",
+        "score": 0.8516449928283691,
+        "slope_deg": 0.0,
+        "aspect_deg": 90.0,
+        "reason": "Prime bedding habitat (score=0.85). E-facing gentle slope with edge cover provides ideal security and comfort.",
+        "lon": -76.47882816291762,
+        "lat": 42.326873309236184
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.47882816291762,
+          42.326873309236184
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 5,
+        "type": "bedding",
+        "score": 0.8513776659965515,
+        "slope_deg": 0.0,
+        "aspect_deg": 90.0,
+        "reason": "Prime bedding habitat (score=0.85). E-facing gentle slope with edge cover provides ideal security and comfort.",
+        "lon": -76.47783717928537,
+        "lat": 42.32439585015559
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.47783717928537,
+          42.32439585015559
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 6,
+        "type": "bedding",
+        "score": 0.8490840792655945,
+        "slope_deg": 0.0,
+        "aspect_deg": 90.0,
+        "reason": "Prime bedding habitat (score=0.85). E-facing gentle slope with edge cover provides ideal security and comfort.",
+        "lon": -76.47701135959184,
+        "lat": 42.32142289925888
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.47701135959184,
+          42.32142289925888
+        ]
+      }
+    }
+  ],
+  "metadata": {
+    "pinch_score_stats": {
+      "layer": "pinch_score_summary",
+      "mean": 0.00904475711286068,
+      "max": 1.0,
+      "std": 0.05882025137543678
+    },
+    "bedding_score_stats": {
+      "layer": "bedding_score_summary",
+      "mean": 0.5298810005187988,
+      "max": 0.8516449928283691,
+      "std": 0.04592102766036987
+    }
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "EPSG:4326"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "aoi_boundary",
+        "name": "Area of Interest"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -76.46467297297296,
+              42.28967297297297
+            ],
+            [
+              -76.46467297297296,
+              42.34372702702702
+            ],
+            [
+              -76.51872702702703,
+              42.34372702702702
+            ],
+            [
+              -76.51872702702703,
+              42.28967297297297
+            ],
+            [
+              -76.46467297297296,
+              42.28967297297297
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 1,
+        "type": "pinch",
+        "score": 0.6544676423072815,
+        "slope_deg": 14.795037671049217,
+        "aspect_deg": 226.8596568826441,
+        "reason": "Moderate travel corridor (score=0.65). Natural terrain feature concentrates wildlife movement.",
+        "lon": -76.51594794965543,
+        "lat": 42.34336918009375
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.51594794965543,
+          42.34336918009375
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 2,
+        "type": "pinch",
+        "score": 0.6142208576202393,
+        "slope_deg": 16.228179218723028,
+        "aspect_deg": 298.31860968098897,
+        "reason": "Moderate travel corridor (score=0.61). Natural terrain feature concentrates wildlife movement.",
+        "lon": -76.51718750849922,
+        "lat": 42.34279071929998
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.51718750849922,
+          42.34279071929998
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 3,
+        "type": "bedding",
+        "score": 0.839024186988998,
+        "slope_deg": 12.679890469492715,
+        "aspect_deg": 236.32711285156867,
+        "reason": "Prime bedding habitat (score=0.84). SW-facing gentle slope with edge cover provides ideal security and comfort.",
+        "lon": -76.49545391010467,
+        "lat": 42.34270808204373
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.49545391010467,
+          42.34270808204373
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 4,
+        "type": "pinch",
+        "score": 0.8802255392074585,
+        "slope_deg": 24.82063293154421,
+        "aspect_deg": 293.9867958287412,
+        "reason": "High-traffic corridor funnel point (score=0.88). Steep adjacent terrain forces movement through this zone.",
+        "lon": -76.51479102806788,
+        "lat": 42.34262544478747
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.51479102806788,
+          42.34262544478747
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 5,
+        "type": "pinch",
+        "score": 0.6407392024993896,
+        "slope_deg": 16.038210421067898,
+        "aspect_deg": 267.6561782633768,
+        "reason": "Moderate travel corridor (score=0.64). Natural terrain feature concentrates wildlife movement.",
+        "lon": -76.51867497911178,
+        "lat": 42.34246017027497
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.51867497911178,
+          42.34246017027497
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 6,
+        "type": "pinch",
+        "score": 0.8527671694755554,
+        "slope_deg": 26.883317598234534,
+        "aspect_deg": 301.159150653259,
+        "reason": "High-traffic corridor funnel point (score=0.85). Steep adjacent terrain forces movement through this zone.",
+        "lon": -76.51611322416792,
+        "lat": 42.34196434673745
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.51611322416792,
+          42.34196434673745
+        ]
+      }
+    }
+  ],
+  "metadata": {
+    "pinch_score_stats": {
+      "layer": "pinch_score_summary",
+      "mean": 0.3896603584289551,
+      "max": 0.9488044381141663,
+      "std": 0.21452392637729645
+    },
+    "bedding_score_stats": {
+      "layer": "bedding_score_summary",
+      "mean": 0.6817820412040858,
+      "max": 0.9459890114730005,
+      "std": 0.12640330780887477
+    }
+  }
+}

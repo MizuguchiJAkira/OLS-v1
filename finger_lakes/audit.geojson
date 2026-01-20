@@ -1,0 +1,227 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "EPSG:4326"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "aoi_boundary",
+        "name": "Area of Interest"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -76.77297297297297,
+              42.472972972972975
+            ],
+            [
+              -76.77297297297297,
+              42.527027027027025
+            ],
+            [
+              -76.82702702702703,
+              42.527027027027025
+            ],
+            [
+              -76.82702702702703,
+              42.472972972972975
+            ],
+            [
+              -76.77297297297297,
+              42.472972972972975
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 1,
+        "type": "bedding",
+        "score": 1.0,
+        "slope_deg": 14.900421331280882,
+        "aspect_deg": 214.500824585594,
+        "reason": "Prime bedding habitat (score=1.00). SW-facing gentle slope with edge cover provides ideal security and comfort.",
+        "lon": -76.82465372388445,
+        "lat": 42.51346972207606
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.82465372388445,
+          42.51346972207606
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 2,
+        "type": "bedding",
+        "score": 1.0,
+        "slope_deg": 14.4545491244577,
+        "aspect_deg": 313.3536272129676,
+        "reason": "Prime bedding habitat (score=1.00). NW-facing gentle slope with edge cover provides ideal security and comfort.",
+        "lon": -76.82631248916564,
+        "lat": 42.51272327769952
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.82631248916564,
+          42.51272327769952
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 3,
+        "type": "bedding",
+        "score": 1.0,
+        "slope_deg": 15.362817294895535,
+        "aspect_deg": 190.16079038153444,
+        "reason": "Prime bedding habitat (score=1.00). S-facing gentle slope with edge cover provides ideal security and comfort.",
+        "lon": -76.82249732901889,
+        "lat": 42.512391524643284
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.82249732901889,
+          42.512391524643284
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 4,
+        "type": "bedding",
+        "score": 1.0,
+        "slope_deg": 13.007734733254198,
+        "aspect_deg": 283.6016738815465,
+        "reason": "Prime bedding habitat (score=1.00). W-facing gentle slope with edge cover provides ideal security and comfort.",
+        "lon": -76.8234925881876,
+        "lat": 42.51098157415426
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.8234925881876,
+          42.51098157415426
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 5,
+        "type": "bedding",
+        "score": 1.0,
+        "slope_deg": 13.225704910323914,
+        "aspect_deg": 246.18556539507512,
+        "reason": "Prime bedding habitat (score=1.00). SW-facing gentle slope with edge cover provides ideal security and comfort.",
+        "lon": -76.82564898305317,
+        "lat": 42.51040100630584
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.82564898305317,
+          42.51040100630584
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 6,
+        "type": "bedding",
+        "score": 1.0,
+        "slope_deg": 14.776346628271272,
+        "aspect_deg": 27.833225229548866,
+        "reason": "Prime bedding habitat (score=1.00). NE-facing gentle slope with edge cover provides ideal security and comfort.",
+        "lon": -76.77696422204994,
+        "lat": 42.509239870609
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.77696422204994,
+          42.509239870609
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 7,
+        "type": "bedding",
+        "score": 1.0,
+        "slope_deg": 14.658875783256537,
+        "aspect_deg": 268.41715716081563,
+        "reason": "Prime bedding habitat (score=1.00). W-facing gentle slope with edge cover provides ideal security and comfort.",
+        "lon": -76.77547133329685,
+        "lat": 42.50824461144028
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.77547133329685,
+          42.50824461144028
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "layer": "recommended_cameras",
+        "camera_id": 8,
+        "type": "bedding",
+        "score": 1.0,
+        "slope_deg": 11.810560329606403,
+        "aspect_deg": 292.48317144461237,
+        "reason": "Prime bedding habitat (score=1.00). W-facing gentle slope with edge cover provides ideal security and comfort.",
+        "lon": -76.77323200016723,
+        "lat": 42.50791285838404
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.77323200016723,
+          42.50791285838404
+        ]
+      }
+    }
+  ],
+  "metadata": {
+    "pinch_score_stats": {
+      "layer": "pinch_score_summary",
+      "mean": 0.23144997656345367,
+      "max": 1.0,
+      "std": 0.1964901238679886
+    },
+    "bedding_score_stats": {
+      "layer": "bedding_score_summary",
+      "mean": 0.6099922979019203,
+      "max": 0.9482111697323927,
+      "std": 0.10272918239579851
+    }
+  }
+}
