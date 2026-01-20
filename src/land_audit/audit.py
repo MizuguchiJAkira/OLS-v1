@@ -217,6 +217,7 @@ class LandAudit:
             ruggedness=ruggedness,
             transform=terrain.transform,
             crs=terrain.crs,
+            water_mask=streams,  # Pass water mask to exclude from corridors
         )
 
         bedding_score = scorer.compute_bedding_score(self.debug_dir / "bedding_score.tif")

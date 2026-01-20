@@ -28,6 +28,7 @@ logger = logging.getLogger(__name__)
 
 try:
     from sklearn.cluster import DBSCAN
+    from sklearn.decomposition import PCA
     SKLEARN_AVAILABLE = True
 except ImportError:
     SKLEARN_AVAILABLE = False
@@ -39,6 +40,108 @@ try:
 except ImportError:
     PLOTLY_AVAILABLE = False
     logger.warning("Plotly not available. 3D visualizations will be skipped.")
+
+try:
+    from scipy.interpolate import splprep, splev
+    from scipy.ndimage import gaussian_filter1d
+    SCIPY_INTERP_AVAILABLE = True
+except ImportError:
+    SCIPY_INTERP_AVAILABLE = False
+    logger.warning("scipy interpolation not available. Channels will use linear paths.")
+
+
+def smooth_channel_path(
+    lons: np.ndarray,
+    lats: np.ndarray,
+    elevs: np.ndarray,
+    colors_list: list | None = None,
+    num_points: int = 100,
+    smoothing: float = 0.5,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, list | None]:
+    """Smooth a movement channel path using spline interpolation.
+
+    Args:
+        lons: Longitude coordinates of channel points
+        lats: Latitude coordinates of channel points
+        elevs: Elevation values at each point
+        colors_list: Optional list of colors for each point
+        num_points: Number of points in the smoothed output
+        smoothing: Smoothing factor (0=interpolate exactly, higher=smoother)
+
+    Returns:
+        Tuple of (smooth_lons, smooth_lats, smooth_elevs, smooth_colors)
+    """
+    if len(lons) < 4:
+        # Not enough points for spline, return as-is
+        return lons, lats, elevs, colors_list
+
+    # Order points along principal axis using PCA
+    if SKLEARN_AVAILABLE:
+        coords = np.column_stack([lons, lats])
+        pca = PCA(n_components=1)
+        projected = pca.fit_transform(coords).flatten()
+        order = np.argsort(projected)
+    else:
+        # Fallback: order by longitude
+        order = np.argsort(lons)
+
+    ordered_lons = lons[order]
+    ordered_lats = lats[order]
+    ordered_elevs = elevs[order]
+    ordered_colors = [colors_list[i] for i in order] if colors_list else None
+
+    if not SCIPY_INTERP_AVAILABLE:
+        # Apply simple Gaussian smoothing if scipy interpolation not available
+        sigma = 2
+        smooth_lons = gaussian_filter1d(ordered_lons, sigma)
+        smooth_lats = gaussian_filter1d(ordered_lats, sigma)
+        smooth_elevs = gaussian_filter1d(ordered_elevs, sigma)
+        return smooth_lons, smooth_lats, smooth_elevs, ordered_colors
+
+    try:
+        # Fit parametric spline through ordered points
+        # Use a subset of points if there are too many (for performance)
+        if len(ordered_lons) > 50:
+            step = len(ordered_lons) // 50
+            subset_lons = ordered_lons[::step]
+            subset_lats = ordered_lats[::step]
+            subset_elevs = ordered_elevs[::step]
+        else:
+            subset_lons = ordered_lons
+            subset_lats = ordered_lats
+            subset_elevs = ordered_elevs
+
+        # Fit spline (k=3 for cubic, s=smoothing factor)
+        points = np.array([subset_lons, subset_lats, subset_elevs])
+        tck, u = splprep(points, s=smoothing * len(subset_lons), k=min(3, len(subset_lons) - 1))
+
+        # Evaluate spline at uniform parameter values
+        u_new = np.linspace(0, 1, num_points)
+        smooth_coords = splev(u_new, tck)
+
+        smooth_lons = np.array(smooth_coords[0])
+        smooth_lats = np.array(smooth_coords[1])
+        smooth_elevs = np.array(smooth_coords[2])
+
+        # Interpolate colors if provided
+        smooth_colors = None
+        if ordered_colors:
+            # Map original colors to smooth path positions
+            # Find which original segment each smooth point belongs to
+            original_u = np.linspace(0, 1, len(ordered_lons))
+            color_indices = np.interp(u_new, original_u, np.arange(len(ordered_colors)))
+            smooth_colors = [ordered_colors[min(int(round(idx)), len(ordered_colors) - 1)] for idx in color_indices]
+
+        return smooth_lons, smooth_lats, smooth_elevs, smooth_colors
+
+    except Exception as e:
+        logger.warning(f"Spline fitting failed: {e}. Using Gaussian smoothing.")
+        # Fallback to Gaussian smoothing
+        sigma = 3
+        smooth_lons = gaussian_filter1d(ordered_lons, sigma)
+        smooth_lats = gaussian_filter1d(ordered_lats, sigma)
+        smooth_elevs = gaussian_filter1d(ordered_elevs, sigma)
+        return smooth_lons, smooth_lats, smooth_elevs, ordered_colors
 
 
 class ReportGenerator:
@@ -468,46 +571,32 @@ class ReportGenerator:
                     
                     logger.info(f"Identified {len(unique_labels)} movement channels from {len(corridor_lons)} corridor points")
                     
-                    # Draw each cluster as a line (movement channel)
+                    # Draw each cluster as a smooth line (movement channel)
                     trace_indices['corridors'] = []
                     for label in sorted(unique_labels):
                         cluster_mask = labels == label
                         cluster_lons = corridor_lons[cluster_mask]
                         cluster_lats = corridor_lats[cluster_mask]
                         cluster_elevs = corridor_elevs[cluster_mask]
-                        
-                        # Sort points to form a connected path (simple nearest neighbor)
+
                         if len(cluster_lons) > 1:
-                            # Find path through cluster points
-                            remaining = set(range(len(cluster_lons)))
-                            path = [remaining.pop()]  # Start with first point
-                            
-                            while remaining:
-                                last_idx = path[-1]
-                                # Find nearest unvisited point
-                                distances = (
-                                    (cluster_lons[list(remaining)] - cluster_lons[last_idx])**2 +
-                                    (cluster_lats[list(remaining)] - cluster_lats[last_idx])**2
-                                )
-                                nearest_idx = list(remaining)[np.argmin(distances)]
-                                path.append(nearest_idx)
-                                remaining.remove(nearest_idx)
-                        
-                            # Create ordered line
-                            path_lons = cluster_lons[path]
-                            path_lats = cluster_lats[path]
-                            path_elevs = cluster_elevs[path] + 3  # Elevate above terrain
-                            
+                            # Smooth the channel path using spline interpolation
+                            smooth_lons, smooth_lats, smooth_elevs, _ = smooth_channel_path(
+                                cluster_lons, cluster_lats, cluster_elevs,
+                                num_points=max(50, len(cluster_lons) * 2),
+                                smoothing=0.3
+                            )
+                            smooth_elevs = smooth_elevs + 3  # Elevate above terrain
+
                             trace_indices['corridors'].append(len(fig.data))
                             fig.add_trace(go.Scatter3d(
-                                x=path_lons,
-                                y=path_lats,
-                                z=path_elevs,
-                                mode='lines+markers',
-                                line=dict(width=6, color='#DC143C'),  # Crimson red lines
-                                marker=dict(size=2, color='#DC143C'),
+                                x=smooth_lons,
+                                y=smooth_lats,
+                                z=smooth_elevs,
+                                mode='lines',
+                                line=dict(width=8, color='#DC143C'),  # Crimson red, thicker smooth line
                                 name=f'Movement Channel {label + 1}',
-                                showlegend=bool(label == min(unique_labels)),  # Show only one legend entry
+                                showlegend=bool(label == min(unique_labels)),
                                 legendgroup='channels',
                                 hovertemplate=f'Channel {label + 1}<br>Predicted Trail<extra></extra>',
                             ))
@@ -632,54 +721,52 @@ class ReportGenerator:
                     else:
                         point_colors.append('#DC143C')  # Red: uncovered
                 
-                # Re-draw movement channels with coverage coloring
+                # Re-draw movement channels with smooth coverage coloring
                 if unique_labels:
                     trace_indices['corridors'] = []
                     for label in sorted(unique_labels):
                         cluster_mask = labels == label
                         cluster_indices = np.where(cluster_mask)[0]
-                        
+
                         cluster_lons_colored = corridor_lons[cluster_mask]
                         cluster_lats_colored = corridor_lats[cluster_mask]
                         cluster_elevs_colored = corridor_elevs[cluster_mask]
                         cluster_colors = [point_colors[i] for i in cluster_indices]
-                        
-                        # Sort points for path
+
                         if len(cluster_lons_colored) > 1:
-                            remaining = set(range(len(cluster_lons_colored)))
-                            path = [remaining.pop()]
-                            
-                            while remaining:
-                                last_idx = path[-1]
-                                distances = (
-                                    (cluster_lons_colored[list(remaining)] - cluster_lons_colored[last_idx])**2 +
-                                    (cluster_lats_colored[list(remaining)] - cluster_lats_colored[last_idx])**2
-                                )
-                                nearest_idx = list(remaining)[np.argmin(distances)]
-                                path.append(nearest_idx)
-                                remaining.remove(nearest_idx)
-                            
-                            path_lons = cluster_lons_colored[path]
-                            path_lats = cluster_lats_colored[path]
-                            path_elevs = cluster_elevs_colored[path] + 3
-                            path_colors = [cluster_colors[i] for i in path]
-                            
+                            # Smooth the channel path with coverage colors
+                            smooth_lons, smooth_lats, smooth_elevs, smooth_colors = smooth_channel_path(
+                                cluster_lons_colored, cluster_lats_colored, cluster_elevs_colored,
+                                colors_list=cluster_colors,
+                                num_points=max(50, len(cluster_lons_colored) * 2),
+                                smoothing=0.3
+                            )
+                            smooth_elevs = smooth_elevs + 3
+
+                            # Calculate coverage percentage for this channel
+                            green_count = sum(1 for c in smooth_colors if c == '#00FF00')
+                            coverage_pct = green_count / len(smooth_colors) * 100 if smooth_colors else 0
+
+                            # Draw smooth line with gradient coloring based on coverage
+                            # Convert colors to numeric for gradient
+                            color_values = [1.0 if c == '#00FF00' else 0.0 for c in smooth_colors]
+
                             trace_indices['corridors'].append(len(fig.data))
                             fig.add_trace(go.Scatter3d(
-                                x=path_lons,
-                                y=path_lats,
-                                z=path_elevs,
-                                mode='lines+markers',
-                                line=dict(width=4, color='#666666'),  # Gray lines
-                                marker=dict(
-                                    size=3,
-                                    color=path_colors,  # Green where covered, red where not
-                                    line=dict(width=0)
+                                x=smooth_lons,
+                                y=smooth_lats,
+                                z=smooth_elevs,
+                                mode='lines',
+                                line=dict(
+                                    width=10,
+                                    color=color_values,
+                                    colorscale=[[0, '#DC143C'], [1, '#00DD00']],  # Red to green
+                                    showscale=False,
                                 ),
-                                name=f'Movement Channel {label + 1}',
+                                name=f'Channel {label + 1} ({coverage_pct:.0f}% covered)',
                                 showlegend=bool(label == min(unique_labels)),
                                 legendgroup='channels',
-                                hovertemplate=f'Channel {label + 1}<br>Predicted Trail<extra></extra>',
+                                hovertemplate=f'Channel {label + 1}<br>{coverage_pct:.0f}% camera coverage<extra></extra>',
                             ))
                 
                 # Add camera markers

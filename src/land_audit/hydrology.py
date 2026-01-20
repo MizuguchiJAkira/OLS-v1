@@ -340,57 +340,56 @@ class HydrologyAnalysis:
         row_coords: np.ndarray,
         col_coords: np.ndarray,
     ) -> np.ndarray:
-        """Calculate terrain gradient at given positions.
-        
+        """Calculate terrain gradient at given positions (vectorized).
+
         Args:
-            row_coords: Row coordinates  
+            row_coords: Row coordinates
             col_coords: Column coordinates
-            
+
         Returns:
             Gradient vectors (Nx2: drow, dcol) pointing downhill
         """
         rows, cols = self.elevation.shape
-        gradients = np.zeros((len(row_coords), 2), dtype=np.float32)
-        
-        for i, (r, c) in enumerate(zip(row_coords, col_coords)):
-            r_int, c_int = int(r), int(c)
-            
-            # Get local 3x3 neighborhood
-            r_min = max(0, r_int - 1)
-            r_max = min(rows, r_int + 2)
-            c_min = max(0, c_int - 1)
-            c_max = min(cols, c_int + 2)
-            
-            if r_max - r_min < 2 or c_max - c_min < 2:
-                continue  # Edge case
-            
-            local_elevation = self.elevation[r_min:r_max, c_min:c_max]
-            center_elev = self.elevation[r_int, c_int]
-            
-            # Find steepest downhill direction
-            local_rows, local_cols = local_elevation.shape
-            center_r, center_c = 1, 1  # Center of 3x3
-            
-            max_drop = 0
-            best_dir = np.array([0.0, 0.0])
-            
-            for dr in [-1, 0, 1]:
-                for dc in [-1, 0, 1]:
-                    if dr == 0 and dc == 0:
-                        continue
-                    
-                    nr, nc = center_r + dr, center_c + dc
-                    if 0 <= nr < local_rows and 0 <= nc < local_cols:
-                        drop = center_elev - local_elevation[nr, nc]
-                        if drop > max_drop:
-                            max_drop = drop
-                            best_dir = np.array([dr, dc], dtype=np.float32)
-            
-            # Normalize direction
-            if max_drop > 0:
-                best_dir = best_dir / (np.linalg.norm(best_dir) + 1e-6)
-                gradients[i] = best_dir * max_drop * 0.1  # Scale by drop magnitude
-        
+        n_particles = len(row_coords)
+        gradients = np.zeros((n_particles, 2), dtype=np.float32)
+
+        # Convert to integer indices
+        r_int = row_coords.astype(np.int32)
+        c_int = col_coords.astype(np.int32)
+
+        # Clamp to valid range (leaving 1-pixel border)
+        r_int = np.clip(r_int, 1, rows - 2)
+        c_int = np.clip(c_int, 1, cols - 2)
+
+        # Get center elevations for all particles at once
+        center_elev = self.elevation[r_int, c_int]
+
+        # Check all 8 neighbors vectorized
+        neighbor_offsets = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+
+        # Compute drops to all neighbors
+        drops = np.zeros((n_particles, 8), dtype=np.float32)
+        for idx, (dr, dc) in enumerate(neighbor_offsets):
+            neighbor_elev = self.elevation[r_int + dr, c_int + dc]
+            drops[:, idx] = center_elev - neighbor_elev
+
+        # Find steepest drop for each particle
+        best_idx = np.argmax(drops, axis=1)
+        max_drops = drops[np.arange(n_particles), best_idx]
+
+        # Convert best index to direction vector
+        dr_vals = np.array([-1, -1, -1, 0, 0, 1, 1, 1], dtype=np.float32)
+        dc_vals = np.array([-1, 0, 1, -1, 1, -1, 0, 1], dtype=np.float32)
+
+        best_dr = dr_vals[best_idx]
+        best_dc = dc_vals[best_idx]
+
+        # Normalize and scale by drop magnitude
+        norms = np.sqrt(best_dr**2 + best_dc**2) + 1e-6
+        mask = max_drops > 0
+        gradients[mask, 0] = (best_dr[mask] / norms[mask]) * max_drops[mask] * 0.1
+        gradients[mask, 1] = (best_dc[mask] / norms[mask]) * max_drops[mask] * 0.1
+
         return gradients
 
     def compute_flow_accumulation(self) -> np.ndarray:
@@ -494,7 +493,7 @@ class HydrologyAnalysis:
         return flow_dir
 
     def _accumulate_flow(self, flow_dir: np.ndarray) -> np.ndarray:
-        """Accumulate flow based on flow directions.
+        """Accumulate flow based on flow directions (vectorized).
 
         Counts how many upstream cells contribute flow to each cell.
 
@@ -505,46 +504,34 @@ class HydrologyAnalysis:
             Flow accumulation array (upstream cell count)
         """
         rows, cols = flow_dir.shape
-        flow_acc = np.ones((rows, cols), dtype=np.float32)  # Use float to normalize later
+        flow_acc = np.ones((rows, cols), dtype=np.float32)
 
-        # D8 direction offsets
-        dir_offsets = [
-            (0, 1),   # E
-            (1, 1),   # SE
-            (1, 0),   # S
-            (1, -1),  # SW
-            (0, -1),  # W
-            (-1, -1), # NW
-            (-1, 0),  # N
-            (-1, 1),  # NE
-        ]
+        # D8 direction offsets: E, SE, S, SW, W, NW, N, NE
+        dir_offsets = np.array([
+            [0, 1], [1, 1], [1, 0], [1, -1],
+            [0, -1], [-1, -1], [-1, 0], [-1, 1]
+        ], dtype=np.int32)
 
-        # Process cells in multiple passes (limit to 15 iterations to prevent overflow)
-        for iteration in range(15):
-            changed = False
-            for row in range(1, rows - 1):
-                for col in range(1, cols - 1):
-                    direction = flow_dir[row, col]
-                    if direction < 8:  # Has downslope flow
-                        dr, dc = dir_offsets[direction]
-                        target_row = row + dr
-                        target_col = col + dc
+        # Vectorized flow accumulation using sparse updates
+        # Process in topological order (high elevation to low)
+        elevation_order = np.argsort(self.elevation.ravel())[::-1]
 
-                        if 0 <= target_row < rows and 0 <= target_col < cols:
-                            old_val = flow_acc[target_row, target_col]
-                            # Cap contribution to prevent runaway accumulation
-                            contribution = min(flow_acc[row, col], 1e6)
-                            flow_acc[target_row, target_col] += contribution
-                            if abs(flow_acc[target_row, target_col] - old_val) > 0.01:
-                                changed = True
+        for idx in elevation_order:
+            row, col = idx // cols, idx % cols
+            if row == 0 or row >= rows - 1 or col == 0 or col >= cols - 1:
+                continue
 
-            if not changed:
-                break
+            direction = flow_dir[row, col]
+            if direction < 8:
+                dr, dc = dir_offsets[direction]
+                target_row, target_col = row + dr, col + dc
+                if 0 <= target_row < rows and 0 <= target_col < cols:
+                    flow_acc[target_row, target_col] += flow_acc[row, col]
 
-        # Normalize using log scale (streams are where accumulation is high)
-        flow_log = np.log1p(flow_acc)  # log(1 + x)
+        # Normalize using log scale
+        flow_log = np.log1p(flow_acc)
         flow_norm = (flow_log - flow_log.min()) / (flow_log.max() - flow_log.min() + 1e-10)
-        
+
         return flow_norm
 
     def identify_streams(

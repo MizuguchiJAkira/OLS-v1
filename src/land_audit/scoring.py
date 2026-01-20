@@ -22,6 +22,7 @@ class HeuristicScorer:
         ruggedness: np.ndarray,
         transform,
         crs,
+        water_mask: np.ndarray | None = None,
     ):
         """Initialize scorer with terrain derivatives.
 
@@ -32,6 +33,7 @@ class HeuristicScorer:
             ruggedness: Terrain ruggedness array
             transform: Rasterio affine transform
             crs: Coordinate reference system
+            water_mask: Optional binary mask of water areas (1=water, 0=land)
         """
         self.slope = slope
         self.aspect = aspect
@@ -39,6 +41,7 @@ class HeuristicScorer:
         self.ruggedness = ruggedness
         self.transform = transform
         self.crs = crs
+        self.water_mask = water_mask
 
         # Normalize inputs for scoring
         self.slope_norm = self._normalize(slope)
@@ -224,18 +227,31 @@ class HeuristicScorer:
         # This makes scores correlate with the NUMBER of nearby high-traffic corridor points
         corridor_threshold = 0.6  # Pixels above this are "corridor"
         high_corridors = (pinch_score > corridor_threshold).astype(np.float32)
-        
+
         # Count corridor pixels in 30x30 window (~300m radius)
         corridor_density = ndimage.uniform_filter(high_corridors, size=30, mode='constant')
         corridor_density_norm = self._normalize(corridor_density)
-        
+
         # Boost base score by corridor density (up to 30% bonus)
         density_boost = corridor_density_norm * 0.3
         pinch_score = pinch_score + (pinch_score * density_boost)
         pinch_score = np.clip(pinch_score, 0, 1)
-        
+
         logger.info(f"Corridor density: max={corridor_density.max():.3f}, mean={corridor_density.mean():.3f}")
         logger.info(f"High-density areas boosted by up to {density_boost.max()*100:.1f}%")
+
+        # WATER EXCLUSION: Zero out pinch scores in water areas
+        # Wildlife corridors should not cross through water bodies
+        if self.water_mask is not None:
+            water_pixels_before = np.sum(pinch_score[self.water_mask > 0] > 0.3)
+            # Zero out scores in water areas
+            pinch_score[self.water_mask > 0] = 0.0
+            # Also create a buffer around water (dilate water mask by ~20m)
+            water_buffer = ndimage.binary_dilation(self.water_mask > 0, iterations=2)
+            # Reduce scores near water (not eliminate, just reduce)
+            near_water = water_buffer & (self.water_mask == 0)
+            pinch_score[near_water] *= 0.3  # 70% reduction near water
+            logger.info(f"Water exclusion: zeroed {water_pixels_before} corridor pixels in water areas")
 
         if output_path:
             self._save_score(pinch_score, output_path, "pinch_score")
